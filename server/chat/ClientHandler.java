@@ -1,12 +1,16 @@
 package chat;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static chat.Logger.logError;
+import static chat.Logger.logInfo;
 
 public class ClientHandler implements Runnable {
     private static final Set<PrintWriter> CLIENT_WRITERS = ConcurrentHashMap.newKeySet();
@@ -26,7 +30,7 @@ public class ClientHandler implements Runnable {
 
             String message;
             while ((message = in.readLine()) != null) {
-                System.out.println("[CHAT]: " + message);
+                logInfo("[CHAT]: " + message);
                 if ("exit".equalsIgnoreCase(message)) {
                     break;
                 }
@@ -36,9 +40,10 @@ public class ClientHandler implements Runnable {
                         writer.println(message);
                     }
                 }
+                out.println("Message '%s' received".formatted(message));
             }
         } catch (IOException e) {
-            System.err.println("[INFO]: Ошибка клиента: " + e.getMessage());
+            logInfo("[INFO]: " + e.getMessage());
         } finally {
             try {
                 socket.close();

@@ -1,9 +1,9 @@
 package chat;
 
-import chat.SocketServer;
+import java.io.IOException;
 
 public class MultiClientServerRunner {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new SocketServer().start();
     }
 }
